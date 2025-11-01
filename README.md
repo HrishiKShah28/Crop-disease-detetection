@@ -1,29 +1,61 @@
-Crop Disease Classification (38 Classes)
-Overview
-This project implements a Convolutional Neural Network (CNN) model utilizing Transfer Learning (MobileNetV2) to accurately classify 38 different categories of healthy and diseased plant leaves from the PlantVillage dataset.
+# 🌿 Crop Disease Identification using Deep Learning (MobileNetV2)
 
-The core achievement was not just the high accuracy (approx. 98% Validation Accuracy), but also successfully resolving a critical MLOps challenge related to model deployment readiness.
+Can deep learning help farmers detect crop diseases early — just from a single photo of a leaf?
 
-Key Features
-High Accuracy: Achieved ~98% Validation Accuracy on a challenging, highly multi-class dataset.
+This project explores that question using the **PlantVillage dataset**, applying **TensorFlow** and **MobileNetV2** to accurately classify **38 types of healthy and diseased leaves**.  
+The model achieves high accuracy after fine-tuning, and demonstrates how AI can make agriculture more efficient and sustainable.
 
-Transfer Learning: Uses MobileNetV2 for efficient feature extraction, ensuring a balance between performance and computational efficiency.
+---
 
-MLOps Efficiency Fix: Successfully developed and implemented a weight-transfer process to strip training-only layers (like data augmentation) from the saved model, creating a clean, production-ready inference file (.weights.h5) without requiring a full 5-hour re-training cycle.
+## 🚀 Project Overview
 
-Technical Stack
-Core Language: Python 3.x
+This project aims to **identify crop diseases from leaf images** using a **convolutional neural network (CNN)** built with TensorFlow and Keras.  
+By training on thousands of real-world images, the model learns to recognize subtle texture and color variations that indicate disease.
 
-Frameworks: TensorFlow, Keras
+---
 
-Libraries: NumPy, Matplotlib, Scikit-learn, Seaborn
+## 📂 Dataset
 
-1. Environment Setup
-Bash
+**Dataset Used:** [PlantVillage Dataset](https://www.kaggle.com/datasets/emmarex/plantdisease)  
+- Total Images: **~50,000+**  
+- Classes: **38 (Healthy + Diseased)**  
+- Type: RGB Color Images  
+- Split into:  
+  - **Training Set:** 80%  
+  - **Validation Set:** 20%
 
-# Install dependencies (ensure compatibility with TensorFlow 2.x / Keras)
-pip install tensorflow keras numpy pandas matplotlib seaborn scikit-learn split-folders
-2. Data and Training
-Place the raw PlantVillage data in the appropriate directory (plantvillage dataset/color).
+Each folder corresponds to a crop–disease class (e.g. `Tomato_Bacterial_spot`, `Potato_Early_blight`, `Apple_healthy`).
 
-Run the notebook.ipynb sequentially to perform the data split, define the MobileNetV2 architecture, execute transfer learning, and fine-tune the model. This generates the performance plots and the confusion matrix.
+---
+
+## ⚙️ Methodology
+
+### 🧩 1. Data Preparation
+- Loaded the dataset using `tf.keras.utils.image_dataset_from_directory()`
+- Ensured class balance between training and validation
+- Applied **data augmentation** to improve generalization:
+  - Random rotations
+  - Horizontal/vertical flips
+  - Contrast normalization
+
+### 🧠 2. Model Architecture
+- **Base Model:** `MobileNetV2` (pretrained on ImageNet)
+- **Top Layers Added:**
+  - GlobalAveragePooling2D
+  - Dense(512, activation='relu')
+  - Dropout(0.3)
+  - Dense(38, activation='softmax')
+
+### ⚡ 3. Training Details
+- **Loss Function:** `categorical_crossentropy`
+- **Optimizer:** `Adam` with learning rate `0.0001`
+- **Epochs:** Multiple phases — base training + fine-tuning
+- **Fine-tuning:** Unfroze layers after index 100
+- **Training Time:** ~5 hours on GPU
+
+### 📈 4. Results
+- High validation accuracy with minimal overfitting
+- Smooth convergence observed during fine-tuning
+- Robust performance across multiple crop categories
+
+---
